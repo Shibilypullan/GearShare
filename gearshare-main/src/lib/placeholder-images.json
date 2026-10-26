@@ -1,0 +1,58 @@
+{
+  "placeholderImages": [
+    {
+      "id": "onboarding-1",
+      "description": "Student borrowing a book from another student",
+      "imageUrl": "https://picsum.photos/seed/gear1/600/400",
+      "imageHint": "student borrowing"
+    },
+    {
+      "id": "onboarding-2",
+      "description": "Camera and gadgets for rent",
+      "imageUrl": "https://picsum.photos/seed/gear2/600/400",
+      "imageHint": "camera rental"
+    },
+    {
+      "id": "onboarding-3",
+      "description": "Happy campus community",
+      "imageUrl": "https://picsum.photos/seed/gear3/600/400",
+      "imageHint": "campus community"
+    },
+    {
+      "id": "item-camera",
+      "description": "Professional DSLR Camera",
+      "imageUrl": "https://picsum.photos/seed/dslr/400/300",
+      "imageHint": "dslr camera"
+    },
+    {
+      "id": "item-laptop",
+      "description": "MacBook Air",
+      "imageUrl": "https://picsum.photos/seed/laptop/400/300",
+      "imageHint": "macbook laptop"
+    },
+    {
+      "id": "item-books",
+      "description": "Engineering Textbooks",
+      "imageUrl": "https://picsum.photos/seed/books/400/300",
+      "imageHint": "textbooks engineering"
+    },
+    {
+      "id": "item-calculator",
+      "description": "Scientific Calculator",
+      "imageUrl": "https://picsum.photos/seed/calc/400/300",
+      "imageHint": "scientific calculator"
+    },
+    {
+      "id": "user-avatar-1",
+      "description": "Student Profile 1",
+      "imageUrl": "https://picsum.photos/seed/user1/150/150",
+      "imageHint": "student portrait"
+    },
+    {
+      "id": "user-avatar-2",
+      "description": "Student Profile 2",
+      "imageUrl": "https://picsum.photos/seed/user2/150/150",
+      "imageHint": "student person"
+    }
+  ]
+}

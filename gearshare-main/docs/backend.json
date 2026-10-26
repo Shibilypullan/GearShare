@@ -1,0 +1,544 @@
+
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user account in the GearShare campus marketplace, including their profile information and reputation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "fullName": {
+          "type": "string",
+          "description": "The full name of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's primary email address, used for login and communication.",
+          "format": "email"
+        },
+        "profilePhotoUrl": {
+          "type": "string",
+          "description": "URL to the user's profile photo.",
+          "format": "uri"
+        },
+        "trustScore": {
+          "type": "number",
+          "description": "A reputation score (out of 5) for the user, derived from transaction history and reviews."
+        },
+        "memberSince": {
+          "type": "string",
+          "description": "The date and time when the user joined the platform.",
+          "format": "date-time"
+        },
+        "pointsBalance": {
+          "type": "number",
+          "description": "Current points balance for referral rewards."
+        },
+        "receiveTransactionNotifications": {
+          "type": "boolean",
+          "description": "Indicates if the user wishes to receive notifications for transaction updates (e.g., request approved/rejected)."
+        },
+        "receiveMessageNotifications": {
+          "type": "boolean",
+          "description": "Indicates if the user wishes to receive notifications for new messages."
+        }
+      },
+      "required": [
+        "id",
+        "fullName",
+        "email",
+        "memberSince",
+        "receiveTransactionNotifications",
+        "receiveMessageNotifications"
+      ]
+    },
+    "Category": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Category",
+      "type": "object",
+      "description": "Represents a predefined category for items available in the marketplace.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Category entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the category (e.g., Books, Calculator, Laptop)."
+        },
+        "iconUrl": {
+          "type": "string",
+          "description": "URL to an icon representing the category.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Item": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Item",
+      "type": "object",
+      "description": "Represents an item listed by a user for borrowing in the marketplace.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Item entity."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to the User who owns and listed this item. (Relationship: User 1:N Item)"
+        },
+        "categoryId": {
+          "type": "string",
+          "description": "Reference to the Category this item belongs to. (Relationship: Category 1:N Item)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name or title of the item."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the item, potentially AI-generated or assisted."
+        },
+        "photoUrls": {
+          "type": "array",
+          "description": "An array of URLs to photos of the item.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "condition": {
+          "type": "string",
+          "description": "The physical condition of the item (e.g., 'Excellent', 'Good', 'Fair')."
+        },
+        "pricePerDay": {
+          "type": "number",
+          "description": "The rental price of the item per day in local currency (INR)."
+        },
+        "isFree": {
+          "type": "boolean",
+          "description": "Indicates if the item is offered for free (true) or has a rental price (false)."
+        },
+        "pickupLocationAddress": {
+          "type": "string",
+          "description": "The physical address where the item can be picked up and returned."
+        },
+        "latitude": {
+          "type": "number",
+          "description": "The latitude coordinate of the item's pickup location."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "The longitude coordinate of the item's pickup location."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The date and time when the item listed.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The date and time when the item listing was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "categoryId",
+        "name",
+        "description",
+        "photoUrls",
+        "condition",
+        "isFree",
+        "pickupLocationAddress",
+        "latitude",
+        "longitude",
+        "createdAt"
+      ]
+    },
+    "Transaction": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Transaction",
+      "type": "object",
+      "description": "Represents a borrow request and its lifecycle from initiation to completion, including secure exchange details.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Transaction entity."
+        },
+        "itemId": {
+          "type": "string",
+          "description": "Reference to the Item being borrowed in this transaction. (Relationship: Item 1:N Transaction)"
+        },
+        "borrowerId": {
+          "type": "string",
+          "description": "Reference to the User who is borrowing the item. (Relationship: User 1:N Transaction)"
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to the User who owns and is lending the item. (Relationship: User 1:N Transaction)"
+        },
+        "requestedStartDate": {
+          "type": "string",
+          "description": "The requested start date for borrowing the item.",
+          "format": "date"
+        },
+        "requestedEndDate": {
+          "type": "string",
+          "description": "The requested end date for borrowing the item.",
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the transaction (e.g., 'Pending', 'Approved', 'Rejected', 'PickedUp', 'Returned', 'Completed')."
+        },
+        "requestDate": {
+          "type": "string",
+          "description": "The date and time when the borrow request was initiated.",
+          "format": "date-time"
+        },
+        "approvalDate": {
+          "type": "string",
+          "description": "The date and time when the owner approved the request.",
+          "format": "date-time"
+        },
+        "actualPickupDate": {
+          "type": "string",
+          "description": "The actual date and time when the item was picked up.",
+          "format": "date-time"
+        },
+        "actualReturnDate": {
+          "type": "string",
+          "description": "The actual date and time when the item was returned.",
+          "format": "date-time"
+        },
+        "pickupCode": {
+          "type": "string",
+          "description": "A unique verification code generated for secure item pickup."
+        },
+        "totalRentalPrice": {
+          "type": "number",
+          "description": "The total calculated rental price for the transaction, if applicable."
+        }
+      },
+      "required": [
+        "id",
+        "itemId",
+        "borrowerId",
+        "ownerId",
+        "requestedStartDate",
+        "requestedEndDate",
+        "status",
+        "requestDate",
+        "pickupCode"
+      ]
+    },
+    "Review": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Review",
+      "type": "object",
+      "description": "Represents a review given by a user about an item or another user following a transaction.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Review entity."
+        },
+        "transactionId": {
+          "type": "string",
+          "description": "Reference to the Transaction this review is associated with. (Relationship: Transaction 1:N Review)"
+        },
+        "reviewerId": {
+          "type": "string",
+          "description": "Reference to the User who wrote this review. (Relationship: User 1:N Review)"
+        },
+        "reviewedUserId": {
+          "type": "string",
+          "description": "Reference to the User being reviewed (e.g., the item owner if written by borrower, or borrower if by owner). (Relationship: User 1:N Review)"
+        },
+        "itemId": {
+          "type": "string",
+          "description": "Reference to the Item that was part of the transaction being reviewed. (Relationship: Item 1:N Review)"
+        },
+        "rating": {
+          "type": "number",
+          "description": "The star rating given in the review (1 to 5)."
+        },
+        "comment": {
+          "type": "string",
+          "description": "The textual content of the review."
+        },
+        "reviewDate": {
+          "type": "string",
+          "description": "The date and time when the review was submitted.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "transactionId",
+        "reviewerId",
+        "reviewedUserId",
+        "itemId",
+        "rating",
+        "comment",
+        "reviewDate"
+      ]
+    },
+    "Conversation": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Conversation",
+      "type": "object",
+      "description": "Represents a private message thread between two users.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Conversation entity."
+        },
+        "participantUserIds": {
+          "type": "array",
+          "description": "An array of two User IDs participating in this conversation. (Relationship: User N:N Conversation)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "itemId": {
+          "type": "string",
+          "description": "Optional: Reference to an Item if the conversation is related to a specific listing. (Relationship: Item 1:N Conversation)"
+        },
+        "transactionId": {
+          "type": "string",
+          "description": "Optional: Reference to a Transaction if the conversation is related to an ongoing or past borrow. (Relationship: Transaction 1:N Conversation)"
+        },
+        "lastMessage": {
+          "type": "string",
+          "description": "The last message content in the conversation."
+        },
+        "lastMessageAt": {
+          "type": "string",
+          "description": "The date and time of the last message in the conversation, used for sorting.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "participantUserIds"
+      ]
+    },
+    "Message": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Message",
+      "type": "object",
+      "description": "Represents a single message within a conversation between users.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Message entity."
+        },
+        "conversationId": {
+          "type": "string",
+          "description": "Reference to the Conversation this message belongs to. (Relationship: Conversation 1:N Message)"
+        },
+        "senderId": {
+          "type": "string",
+          "description": "Reference to the User who sent this message. (Relationship: User 1:N Message)"
+        },
+        "participantUserIds": {
+            "type": "array",
+            "description": "Array of participant UIDs, denormalized from parent Conversation.",
+            "items": { "type": "string" }
+        },
+        "content": {
+          "type": "string",
+          "description": "The textual content of the message."
+        },
+        "sentAt": {
+          "type": "string",
+          "description": "The date and time when the message was sent.",
+          "format": "date-time"
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "Indicates if the recipient has read the message."
+        }
+      },
+      "required": [
+        "id",
+        "conversationId",
+        "senderId",
+        "participantUserIds",
+        "content",
+        "sentAt",
+        "isRead"
+      ]
+    },
+    "Notification": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Notification",
+      "type": "object",
+      "description": "Represents an in-app notification for a user regarding various events.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Notification entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who receives this notification. (Relationship: User 1:N Notification)"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of notification (e.g., 'TransactionRequest', 'MessageReceived', 'ItemApproved', 'ReviewReceived')."
+        },
+        "message": {
+          "type": "string",
+          "description": "The content or message displayed in the notification."
+        },
+        "relatedEntityId": {
+          "type": "string",
+          "description": "Optional: Reference to a related entity (e.g., transactionId, conversationId) that the notification pertains to."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The date and time when the notification was created.",
+          "format": "date-time"
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "Indicates if the user has read or viewed the notification."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "type",
+        "message",
+        "createdAt",
+        "isRead"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "google.com"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores individual user profiles.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/categories",
+        "definition": {
+          "entityName": "Category",
+          "schema": {
+            "$ref": "#/backend/entities/Category"
+          },
+          "description": "Stores predefined categories for items."
+        }
+      },
+      {
+        "path": "/items",
+        "definition": {
+          "entityName": "Item",
+          "schema": {
+            "$ref": "#/backend/entities/Item"
+          },
+          "description": "Stores all item listings available in the marketplace."
+        }
+      },
+      {
+        "path": "/transactions",
+        "definition": {
+          "entityName": "Transaction",
+          "schema": {
+            "$ref": "#/backend/entities/Transaction"
+          },
+          "description": "Manages borrow requests and their lifecycle."
+        }
+      },
+      {
+        "path": "/reviews",
+        "definition": {
+          "entityName": "Review",
+          "schema": {
+            "$ref": "#/backend/entities/Review"
+          },
+          "description": "Stores user reviews for items and users."
+        }
+      },
+      {
+        "path": "/conversations",
+        "definition": {
+          "entityName": "Conversation",
+          "schema": {
+            "$ref": "#/backend/entities/Conversation"
+          },
+          "description": "Manages private message threads between two users."
+        }
+      },
+      {
+        "path": "/conversations/{conversationId}/messages/{messageId}",
+        "definition": {
+          "entityName": "Message",
+          "schema": {
+            "$ref": "#/backend/entities/Message"
+          },
+          "description": "Stores individual messages within a conversation.",
+          "params": [
+            {
+              "name": "conversationId",
+              "description": "The unique identifier of the parent conversation."
+            },
+            {
+              "name": "messageId",
+              "description": "The unique identifier of the message."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/notifications/{notificationId}",
+        "definition": {
+          "entityName": "Notification",
+          "schema": {
+            "$ref": "#/backend/entities/Notification"
+          },
+          "description": "Stores private notifications for individual users.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user receiving the notification."
+            },
+            {
+              "name": "notificationId",
+              "description": "The unique identifier of the notification."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
